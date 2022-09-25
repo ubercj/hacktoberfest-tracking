@@ -54,8 +54,8 @@
       const updates = {
         id: user.id,
         username,
-        shirtSize,
-        pullRequests,
+        shirt_size: shirtSize,
+        pull_requests: pullRequests,
         website,
         avatar_url: avatarUrl,
         updated_at: new Date().toISOString(),
