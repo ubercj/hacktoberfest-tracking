@@ -8,6 +8,8 @@
 
   let loading = false
   let username: string | null = null
+  let shirtSize: string | null = null
+  let pullRequests: number | null = 0
   let website: string | null = null
   let avatarUrl: string | null = null
 
@@ -22,7 +24,7 @@
       
       const { data, error, status } = await supabase
         .from('profiles')
-        .select('username, website, avatar_url')
+        .select('username, website, avatar_url, shirt_size, pull_requests')
         .eq('id', user.id)
         .single()
       
@@ -32,6 +34,8 @@
         username = data.username
         website = data.website
         avatarUrl = data.avatar_url
+        shirtSize = data.shirt_size
+        pullRequests = data.pull_requests
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -50,6 +54,8 @@
       const updates = {
         id: user.id,
         username,
+        shirtSize,
+        pullRequests,
         website,
         avatar_url: avatarUrl,
         updated_at: new Date().toISOString(),
@@ -76,6 +82,14 @@
   <div>
     <label for="username">Name</label>
     <input id="username" type="text" bind:value={username} />
+  </div>
+  <div>
+    <label for="shirtSize">Shirt Size</label>
+    <input id="shirtSize" type="text" bind:value={shirtSize} />
+  </div>
+  <div>
+    <label for="pullRequests">Pull Requests</label>
+    <input id="pullRequests" type="number" bind:value={pullRequests} />
   </div>
   <div>
     <label for="website">Website</label>
