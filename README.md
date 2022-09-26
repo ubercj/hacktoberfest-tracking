@@ -1,48 +1,26 @@
-# Svelte + TS + Vite
+# Hacktoberfest Tracking Dashboard
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+A fun, over-engineered SPA to replace E-g's internal Hacktoberfest Participant Tracker Google doc. Live production app is hosted here: https://hacktoberfest-tracking.vercel.app/
 
-## Recommended IDE Setup
+## Technology Summary
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+- [Supabase](https://supabase.com/)
+- [Svelte](https://svelte.dev/)
+- [Vite](https://vitejs.dev/)
+- [Vercel](https://vercel.com/)
 
-## Need an official Svelte framework?
+Using [VS Code](https://code.visualstudio.com/) with the [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) extension is recommended.
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## Contributing
 
-## Technical considerations
+Open issues can be found [here](https://github.com/ubercj/hacktoberfest-tracking/issues). If you see an issue you'd like to tackle, please comment on the issue first to signal your intent and make sure two people don't end up working on the same issue without knowing.
 
-**Why use this over SvelteKit?**
+Just clone the repo, make a feature branch and submit a PR with your changes. Chris will give it a review before merging. If you have any questions, you can email or Slack Chris at his E-g email.
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-  `vite dev` and `vite build` wouldn't work in a SvelteKit environment, for example.
+### Environment Variables
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+You'll need a few environment variables set in a `.env` file before you can start development in order to connect to Supabase, etc. Get in touch with Chris via Slack or email and he'll give you what you need.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+### Supabase permissions
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+Supabase uses a postgres database - if you would like to make a contribution that involves adding tables, changing schemas, or anything else that involves database changes, you'll need to be able to log in to the Supabase project dashboard. Get in touch with Chris for the login credentials.
