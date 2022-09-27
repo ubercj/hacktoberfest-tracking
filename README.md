@@ -13,14 +13,15 @@ Using [VS Code](https://code.visualstudio.com/) with the [Svelte](https://market
 
 ## Contributing
 
-Open issues can be found [here](https://github.com/ubercj/hacktoberfest-tracking/issues). If you see an issue you'd like to tackle, please comment on the issue first to signal your intent and make sure two people don't end up working on the same issue without knowing.
+### What you need to get started
 
-Just clone the repo, make a feature branch and submit a PR with your changes. Chris will give it a review before merging. If you have any questions, you can email or Slack Chris at his E-g email.
+- Environment variables (put these in a .env file)
+- Supabase access
 
-### Environment Variables
+Get in touch with Chris via his E-g email or Slack and he'll get you set up
 
-You'll need a few environment variables set in a `.env` file before you can start development in order to connect to Supabase, etc. Get in touch with Chris via Slack or email and he'll give you what you need.
+### Workflow
 
-### Supabase permissions
+Open issues can be found [here](https://github.com/ubercj/hacktoberfest-tracking/issues). If you see an issue you'd like to tackle, please comment on the issue first to signal your intent and make sure two people don't end up working on the same issue without knowing. Then, make a feature branch and submit a PR with your changes. One passing review (you can tag Chris) is required before it can be merged to main.
 
-Supabase uses a postgres database - if you would like to make a contribution that involves adding tables, changing schemas, or anything else that involves database changes, you'll need to be able to log in to the Supabase project dashboard. Get in touch with Chris for the login credentials.
+If you have any questions or suggestions about anything, feel free to reach out to Chris
