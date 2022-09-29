@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import type { AuthSession } from "@supabase/supabase-js";
-  import { supabase } from "../supabaseClient";
-  import Avatar from "./Avatar.svelte";
+  import { onMount } from 'svelte'
+  import type { AuthSession } from '@supabase/supabase-js'
+  import { supabase } from '../supabaseClient'
+  import Avatar from './Avatar.svelte'
 
-  export let session: AuthSession;
+  export let session: AuthSession
 
   let loading = false
   let username: string | null = null
@@ -21,13 +21,13 @@
     try {
       loading = true
       const { user } = session
-      
+
       const { data, error, status } = await supabase
         .from('profiles')
         .select('username, website, avatar_url, shirt_size, pull_requests')
         .eq('id', user.id)
         .single()
-      
+
       if (error && status !== 406) throw error
 
       if (data) {
@@ -62,7 +62,7 @@
       }
 
       let { error } = await supabase.from('profiles').upsert(updates)
-      
+
       if (error) {
         throw error
       }
@@ -100,7 +100,11 @@
       {loading ? 'Saving ...' : 'Update profile'}
     </button>
   </div>
-  <button type="button" class="button block" on:click={() => supabase.auth.signOut()}>
+  <button
+    type="button"
+    class="button block"
+    on:click={() => supabase.auth.signOut()}
+  >
     Sign Out
   </button>
 </form>

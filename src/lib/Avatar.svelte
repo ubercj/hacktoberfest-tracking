@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import { supabase } from "../supabaseClient"
+  import { createEventDispatcher } from 'svelte'
+  import { supabase } from '../supabaseClient'
 
   export let size: number
   export let url: string
-  
+
   let avatarUrl: string = null
   let uploading = false
   let files: FileList
@@ -13,7 +13,9 @@
 
   const downloadImage = async (path: string) => {
     try {
-      const { data, error } = await supabase.storage.from('avatars').download(path)
+      const { data, error } = await supabase.storage
+        .from('avatars')
+        .download(path)
 
       if (error) {
         throw error
@@ -43,7 +45,7 @@
       let { error } = await supabase.storage
         .from('avatars')
         .upload(filePath, file)
-      
+
       if (error) {
         throw error
       }
@@ -63,7 +65,7 @@
 </script>
 
 <div style="width: {size}px" aria-live="polite">
-  {#if avatarUrl}  
+  {#if avatarUrl}
     <img
       src={avatarUrl}
       alt={avatarUrl ? 'Avatar' : 'No image'}
@@ -71,10 +73,7 @@
       style="height: {size}px, width: {size}px"
     />
   {:else}
-    <div
-      class="avatar no-image"
-      style="height: {size}px, width: {size}px"
-    />
+    <div class="avatar no-image" style="height: {size}px, width: {size}px" />
   {/if}
   <div style="width: {size}px">
     <label class="button primary block" for="single">

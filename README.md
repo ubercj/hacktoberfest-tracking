@@ -1,6 +1,6 @@
 # Hacktoberfest Tracking Dashboard
 
-A fun, over-engineered SPA to replace E-g's internal Hacktoberfest Participant Tracker Google doc. Live production app is hosted here: https://hacktoberfest-tracking.vercel.app/
+A fun, over-engineered SPA to track progress and PRs during Hacktoberfest. Live production app is hosted here: https://hacktoberfest-tracking.vercel.app/
 
 ## Technology Summary
 
@@ -18,7 +18,7 @@ Using [VS Code](https://code.visualstudio.com/) with the [Svelte](https://market
 - Environment variables (put these in a .env file)
 - Supabase access
 
-Get in touch with Chris via his E-g email or Slack and he'll get you set up
+Get in touch with Chris and he'll get you set up with these variables and credentials
 
 ### Workflow
 
