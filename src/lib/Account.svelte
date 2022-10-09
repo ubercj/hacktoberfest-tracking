@@ -76,35 +76,38 @@
   }
 </script>
 
-<form on:submit|preventDefault={updateProfile} class="form-widget">
-  <Avatar bind:url={avatarUrl} size={150} on:upload={updateProfile} />
-  <div>Email: {session.user.email}</div>
-  <div>
-    <label for="username">Name</label>
-    <input id="username" type="text" bind:value={username} />
-  </div>
-  <div>
-    <label for="shirtSize">Shirt Size</label>
-    <input id="shirtSize" type="text" bind:value={shirtSize} />
-  </div>
-  <div>
-    <label for="pullRequests">Pull Requests</label>
-    <input id="pullRequests" type="number" bind:value={pullRequests} />
-  </div>
-  <div>
-    <label for="website">Website</label>
-    <input id="website" type="text" bind:value={website} />
-  </div>
-  <div>
-    <button type="submit" class="button primary block" disabled={loading}>
-      {loading ? 'Saving ...' : 'Update profile'}
+<section class="user-account">
+  <h2>Your Profile</h2>
+  <form on:submit|preventDefault={updateProfile} class="form-widget">
+    <Avatar bind:url={avatarUrl} size={150} on:upload={updateProfile} />
+    <div>Email: {session.user.email}</div>
+    <div>
+      <label for="username">Name</label>
+      <input id="username" type="text" bind:value={username} />
+    </div>
+    <div>
+      <label for="shirtSize">Shirt Size</label>
+      <input id="shirtSize" type="text" bind:value={shirtSize} />
+    </div>
+    <div>
+      <label for="pullRequests">Pull Requests</label>
+      <input id="pullRequests" type="number" bind:value={pullRequests} />
+    </div>
+    <div>
+      <label for="website">Website</label>
+      <input id="website" type="text" bind:value={website} />
+    </div>
+    <div>
+      <button type="submit" class="button primary block" disabled={loading}>
+        {loading ? 'Saving ...' : 'Update profile'}
+      </button>
+    </div>
+    <button
+      type="button"
+      class="button block"
+      on:click={() => supabase.auth.signOut()}
+    >
+      Sign Out
     </button>
-  </div>
-  <button
-    type="button"
-    class="button block"
-    on:click={() => supabase.auth.signOut()}
-  >
-    Sign Out
-  </button>
-</form>
+  </form>
+</section>

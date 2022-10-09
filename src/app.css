@@ -32,12 +32,23 @@ body,
   overflow-x: hidden;
 }
 
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
 /* Grid */
 
 .container {
   width: 90%;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 10rem;
 }
 .row {
   position: relative;
@@ -161,7 +172,6 @@ body,
   /* 960px */
   .container {
     width: 75%;
-    max-width: 60rem;
   }
 }
 
@@ -369,4 +379,32 @@ button.primary,
   width: 17px;
   animation: spin 1s linear infinite;
   filter: invert(1);
+}
+
+/* Dashboard page */
+
+.dashboard {
+  flex: 2;
+  padding: 2rem
+}
+
+.user-account {
+  flex: 1;
+  padding: 2rem;
+  border-right: 1px solid var(--custom-color)
+}
+
+.profiles {
+  padding: 1rem 0;
+  border-top: 1px solid var(--custom-color);
+}
+
+.profile-username {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.profile-description {
+  border-bottom: 1px solid var(--custom-color);
+  margin-bottom: 1rem;
 }
