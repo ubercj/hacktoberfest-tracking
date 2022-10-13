@@ -15,8 +15,10 @@ Using [VS Code](https://code.visualstudio.com/) with the [Svelte](https://market
 
 ### What you need to get started
 
-- Environment variables (put these in a .env file)
 - Supabase access
+  - You'll need to sign up for a Supabase account with a Github account, then Chris can send you an invitation to the email associated with your Github
+- Environment variables (put these in a .env file), specifically `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+  - These can be found in the Hacktoberfest Tracking 2022 project in Supabase under Settings > Api
 
 Get in touch with Chris and he'll get you set up with these variables and credentials
 
