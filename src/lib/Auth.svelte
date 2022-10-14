@@ -1,5 +1,8 @@
 <script lang="ts">
   import { supabase } from '../supabaseClient'
+  import { title } from "../stores/title.js";
+
+	title.set('Login');
 
   let loadingSignIn: boolean = false
   let loadingSignUp: boolean = false

@@ -3,6 +3,9 @@
   import type { AuthSession } from '@supabase/supabase-js'
   import { supabase } from '../supabaseClient'
   import Avatar from './Avatar.svelte'
+  import { title } from "../stores/title.js";
+
+  title.set('Account');
 
   export let session: AuthSession
 

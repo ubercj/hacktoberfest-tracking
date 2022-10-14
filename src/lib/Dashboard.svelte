@@ -1,6 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { supabase } from '../supabaseClient'
+  import { title } from "../stores/title.js";
+
+	title.set('Dashboard');
 
   let loading = false
   let profiles = []

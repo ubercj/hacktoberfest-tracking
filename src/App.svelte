@@ -5,7 +5,9 @@
   import Account from './lib/Account.svelte'
   import Auth from './lib/Auth.svelte'
   import Dashboard from './lib/Dashboard.svelte'
+  import { title } from "./stores/title.js";
 
+  title.clear()
   let session: AuthSession
 
   onMount(() => {
@@ -18,6 +20,10 @@
     })
   })
 </script>
+
+<svelte:head>
+	<title>{$title}</title>
+</svelte:head>
 
 <main class="container" style="padding: 50px 0 100px 0">
   {#if !session}
