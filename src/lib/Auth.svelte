@@ -1,6 +1,6 @@
 <script lang="ts">
   import { supabase } from '../supabaseClient'
-  import { title } from "../data/title.js";
+  import { title } from "../stores/title.js";
 
 	title.set('Login');
 

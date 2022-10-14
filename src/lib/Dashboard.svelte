@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { supabase } from '../supabaseClient'
-  import { title } from "../data/title.js";
+  import { title } from "../stores/title.js";
 
 	title.set('Dashboard');
 

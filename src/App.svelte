@@ -5,7 +5,7 @@
   import Account from './lib/Account.svelte'
   import Auth from './lib/Auth.svelte'
   import Dashboard from './lib/Dashboard.svelte'
-  import { title } from "./data/title.js";
+  import { title } from "./stores/title.js";
 
   title.clear()
   let session: AuthSession
