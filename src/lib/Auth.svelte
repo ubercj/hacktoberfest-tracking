@@ -1,6 +1,7 @@
 <script lang="ts">
   import { supabase } from '../supabaseClient'
   import { title } from "../stores/title.js";
+  import { link } from "svelte-routing";
 
 	title.set('Login');
 
@@ -64,6 +65,6 @@
       </div>
     </form>
 
-    <p class="description">Don't have an account? Sign up <a href="/signup">here</a>.</p>
+    <p class="description">Don't have an account? Sign up <a href="/signup" use:link>here</a>.</p>
   </div>
 </div>
