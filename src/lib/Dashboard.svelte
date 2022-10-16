@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import { supabase } from '../supabaseClient'
   import { title } from '../stores/title.js'
+  import { link } from 'svelte-routing'
 
   title.set('Dashboard')
   import type { AuthSession } from '@supabase/supabase-js'
@@ -93,6 +94,14 @@
     </select>
   </header>
 
+  {#if !userGroups.length}
+    <p>
+      You are not a member of any groups. <a href="/groups" use:link
+        >Join a group.</a
+      >
+    </p>
+  {/if}
+
   <dl class="profiles">
     {#each profiles as profile}
       <dt class="profile-username">{profile.username}</dt>
@@ -102,6 +111,8 @@
       </dd>
     {/each}
   </dl>
+
+  <p><a href="/groups" use:link>See all groups.</a></p>
 </section>
 
 <style>

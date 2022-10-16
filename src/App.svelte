@@ -8,6 +8,7 @@
   import { title } from './stores/title.js'
   import { Router, Route } from 'svelte-routing'
   import Signup from './lib/Signup.svelte'
+  import Groups from './lib/Groups.svelte'
 
   title.clear()
   let session: AuthSession
@@ -39,6 +40,7 @@
         <Account {session} />
         <Dashboard {session} />
       </Route>
+      <Route path="/groups"><Groups {session} /></Route>
     {/if}
   </main>
 </Router>
