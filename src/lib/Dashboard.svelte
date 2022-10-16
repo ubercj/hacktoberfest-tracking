@@ -1,42 +1,97 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { supabase } from '../supabaseClient'
-  import { title } from "../stores/title.js";
+  import { title } from '../stores/title.js'
 
-	title.set('Dashboard');
+  title.set('Dashboard')
+  import type { AuthSession } from '@supabase/supabase-js'
+
+  export let session: AuthSession
+  const { user } = session
 
   let loading = false
+  let userGroups = []
+  let selectedGroup
   let profiles = []
 
   onMount(() => {
-    getProfile()
+    getDashboardData()
   })
 
-  const getProfile = async () => {
+  const getDashboardData = async () => {
+    await getGroups()
+    await getGroupProfiles()
+  }
+
+  const getGroups = async () => {
+    const { data: groupData, error: groupError } = await supabase
+      .from('groups')
+      .select(
+        `
+          id,
+          name,
+          group_profile (
+            id
+          )
+        `
+      )
+      .eq('group_profile.profile_id', user.id)
+
+    if (groupData) {
+      userGroups = groupData
+      selectedGroup = groupData[0]
+    }
+  }
+
+  const getGroupProfiles = async () => {
     try {
       loading = true
 
-      const { data, error, status } = await supabase
+      const { data: groupProfiles, error: profilesError } = await supabase
         .from('profiles')
-        .select('username, website, avatar_url, shirt_size, pull_requests')
+        .select(
+          `
+          id,
+          username,
+           website,
+           avatar_url,
+           shirt_size,
+           pull_requests,
+           group_profile!inner (
+            id,
+            group_id
+            )
+          `
+        )
+        .eq('group_profile.group_id', selectedGroup.id)
 
-      if (error && status !== 406) throw error
-
-      if (data) {
-        profiles = data
+      if (groupProfiles) {
+        profiles = groupProfiles
       }
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message)
-      }
+      console.error('Error fetching Groups from database: ', error)
+      alert(`There was an error retrieving data for ${selectedGroup.name}`)
     } finally {
       loading = false
     }
   }
+
+  const handleGroupChange = (event) => {
+    selectedGroup = userGroups.find(
+      (group) => group.id === parseInt(event.target.value)
+    )
+  }
 </script>
 
 <section class="dashboard">
-  <h1>Dashboard</h1>
+  <header>
+    <h1>{selectedGroup ? selectedGroup.name : 'Your'} Dashboard</h1>
+    <select name="groupSelect" id="groupSelect" on:change={handleGroupChange}>
+      {#each userGroups as group}
+        <option value={group.id}>{group.name}</option>
+      {/each}
+    </select>
+  </header>
 
   <dl class="profiles">
     {#each profiles as profile}
@@ -48,3 +103,17 @@
     {/each}
   </dl>
 </section>
+
+<style>
+  header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  select {
+    background: black;
+    color: white;
+    padding: 0.5rem;
+  }
+</style>
