@@ -31,7 +31,7 @@
         `
           id,
           name,
-          group_profile (
+          group_profile!inner (
             id
           )
         `
@@ -47,6 +47,7 @@
   const getGroupProfiles = async () => {
     try {
       loading = true
+      if (!selectedGroup) return
 
       const { data: groupProfiles, error: profilesError } = await supabase
         .from('profiles')
@@ -78,29 +79,35 @@
   }
 
   const handleGroupChange = (event) => {
+    let currGroup = selectedGroup
     selectedGroup = userGroups.find(
       (group) => group.id === parseInt(event.target.value)
     )
+
+    // Re-render list of profiles when group changes
+    if (selectedGroup.id !== currGroup.id) {
+      getGroupProfiles()
+    }
   }
 </script>
 
 <section class="dashboard">
   <header>
     <h1>{selectedGroup ? selectedGroup.name : 'Your'} Dashboard</h1>
-    <select name="groupSelect" id="groupSelect" on:change={handleGroupChange}>
-      {#each userGroups as group}
-        <option value={group.id}>{group.name}</option>
-      {/each}
-    </select>
+    {#if userGroups.length}
+      <select name="groupSelect" id="groupSelect" on:change={handleGroupChange}>
+        {#each userGroups as group}
+          <option value={group.id}>{group.name}</option>
+        {/each}
+      </select>
+    {:else}
+      <p>
+        You are not a member of any groups. <a href="/groups" use:link
+          >Join a group.</a
+        >
+      </p>
+    {/if}
   </header>
-
-  {#if !userGroups.length}
-    <p>
-      You are not a member of any groups. <a href="/groups" use:link
-        >Join a group.</a
-      >
-    </p>
-  {/if}
 
   <dl class="profiles">
     {#each profiles as profile}
@@ -118,6 +125,7 @@
 <style>
   header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
   }

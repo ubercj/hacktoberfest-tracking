@@ -6,30 +6,53 @@
   import { title } from '../stores/title.js'
 
   title.set('Groups')
-  let allGroups = []
   export let session: AuthSession
   const { user } = session
 
+  let allGroups = []
+  let userGroups = []
+
   onMount(() => {
-    getAllGroups()
+    getGroupsData()
   })
 
-  const getAllGroups = async () => {
+  const getGroupsData = async () => {
+    await getJoinedGroups()
+    await getUnjoinedGroups()
+  }
+
+  const getUnjoinedGroups = async () => {
     const { data: groupsData, error: groupsError } = await supabase
       .from('groups')
       .select(
         `
           id,
+          name
+        `
+      )
+      .not('id', 'in', `(${userGroups.map((group) => group.id)})`)
+
+    if (groupsData) {
+      allGroups = groupsData
+    }
+  }
+
+  const getJoinedGroups = async () => {
+    const { data: groupData, error: groupError } = await supabase
+      .from('groups')
+      .select(
+        `
+          id,
           name,
-          group_profile (
+          group_profile!inner (
             id
           )
         `
       )
       .eq('group_profile.profile_id', user.id)
 
-    if (groupsData) {
-      allGroups = groupsData
+    if (groupData) {
+      userGroups = groupData
     }
   }
 
@@ -45,6 +68,9 @@
 
       if (status === 201) {
         alert('You have successfully joined the group.')
+
+        // Re-render list of groups to remove group just joined
+        getGroupsData()
       }
 
       if (error) throw error
@@ -57,6 +83,10 @@
 
 <section class="groups">
   <h1>Groups</h1>
+
+  {#if !allGroups.length}
+    <p>There are no groups to show.</p>
+  {/if}
 
   <dl class="groups-list">
     {#each allGroups as group}
