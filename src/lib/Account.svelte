@@ -122,3 +122,15 @@
     </button>
   </form>
 </section>
+
+<style>
+  .shirt-size-select {
+    width: 100%;
+    border-radius: 5px;
+    border: var(--custom-border);
+    padding: 8px;
+    font-size: 0.9rem;
+    background-color: var(--custom-bg-color);
+    color: var(--custom-color);
+  }
+</style>
