@@ -11,7 +11,8 @@
 
   let loading = false
   let username: string | null = null
-  let shirtSize: string | null = null
+  let shirtSize: string = ''
+  let allShirtSizes: string[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
   let pullRequests: number | null = 0
   let website: string | null = null
   let avatarUrl: string | null = null
@@ -90,7 +91,14 @@
     </div>
     <div>
       <label for="shirtSize">Shirt Size</label>
-      <input id="shirtSize" type="text" bind:value={shirtSize} />
+      <select class="shirt-size-select" bind:value={shirtSize} >
+        <option value='' selected disabled hidden>Select a Size</option>
+        {#each allShirtSizes as singleShirtSize}
+          <option value={singleShirtSize}>
+            {singleShirtSize}
+          </option>
+        {/each}
+      </select>
     </div>
     <div>
       <label for="pullRequests">Pull Requests</label>
@@ -114,3 +122,15 @@
     </button>
   </form>
 </section>
+
+<style>
+  .shirt-size-select {
+    width: 100%;
+    border-radius: 5px;
+    border: var(--custom-border);
+    padding: 8px;
+    font-size: 0.9rem;
+    background-color: var(--custom-bg-color);
+    color: var(--custom-color);
+  }
+</style>
