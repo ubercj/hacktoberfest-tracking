@@ -10,32 +10,31 @@
   import { Router, Route } from 'svelte-routing'
   import Signup from './lib/Signup.svelte'
   import Groups from './lib/Groups.svelte'
-  import { mockUsers } from './mocks/mockUsers'
+  import { mockUser } from './mocks/mockData'
 
-  const loadWorker = async () => {
-    const { worker } = await import('./mocks/browser')
-    worker.start()
-  }
-
+  // For dev environment
   if (import.meta.env.VITE_DEV_SERVER === 'Y') {
+    const loadWorker = async () => {
+      const { worker } = await import('./mocks/browser')
+      worker.start()
+    }
     loadWorker()
   }
-
   const skipLogin = async () => {
     session = {
       access_token: 'dev-token',
       token_type: 'bearer',
-      expires_in: 0,
+      expires_in: 10000,
       refresh_token: 'dev-refresh',
       user: {
         app_metadata: {},
         user_metadata: {},
         aud: 'authenticated',
         created_at: 'now',
-        email: 'mockuser@dev.test',
-        ...mockUsers[0],
+        ...mockUser,
       },
     }
+    currentUser.set(mockUser)
   }
 
   title.clear()

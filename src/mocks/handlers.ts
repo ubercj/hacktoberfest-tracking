@@ -1,6 +1,18 @@
 import { rest } from 'msw'
-import { mockUsers } from './mockUsers'
-import { mockGroups } from './mockGroups'
+import { getMockProfiles, getMockGroups } from './mockData'
+
+// Get mutable copies of seed data
+let mockProfiles = getMockProfiles()
+let mockGroups = getMockGroups()
+
+export const authHandlers = [
+  rest.post(
+    `${import.meta.env.VITE_SUPABASE_URL}/auth/v1/logout`,
+    (req, res, ctx) => {
+      return res(ctx.status(200))
+    }
+  ),
+]
 
 export const profileHandlers = [
   rest.get(
@@ -8,15 +20,15 @@ export const profileHandlers = [
     (req, res, ctx) => {
       // Return only one user profile for Account page
       if (req.url.searchParams.get('id')) {
-        return res(ctx.json(mockUsers[0]))
+        return res(ctx.json(mockProfiles[0]))
       }
-      return res(ctx.json(mockUsers))
+      return res(ctx.json(mockProfiles))
     }
   ),
   rest.post(
     `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/profiles`,
     (req, res, ctx) => {
-      console.log('POST request was intercepted')
+      mockProfiles[0] = req.body
 
       return res(ctx.status(200))
     }

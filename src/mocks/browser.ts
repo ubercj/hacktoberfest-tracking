@@ -1,6 +1,16 @@
 import { setupWorker } from 'msw'
-import { profileHandlers, groupHandlers, avatarHandlers } from './handlers'
+import {
+  authHandlers,
+  profileHandlers,
+  groupHandlers,
+  avatarHandlers,
+} from './handlers'
 
-const reqHandlers = [profileHandlers, groupHandlers, avatarHandlers].flat()
+const reqHandlers = [
+  authHandlers,
+  profileHandlers,
+  groupHandlers,
+  avatarHandlers,
+].flat()
 
 export const worker = setupWorker(...reqHandlers)

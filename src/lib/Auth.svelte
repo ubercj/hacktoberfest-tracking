@@ -21,7 +21,6 @@
       })
 
       if (error) throw error
-      console.log(`Logged in user: ${JSON.stringify(data, undefined, 2)}`)
     } catch (error) {
       console.error(error)
     } finally {
@@ -38,7 +37,6 @@
       })
 
       if (error) throw error
-      console.log(`Logged in user: ${JSON.stringify(data, undefined, 2)}`)
     } catch (error) {
       console.error(error)
     } finally {
