@@ -6,6 +6,7 @@
   import Auth from './lib/Auth.svelte'
   import Dashboard from './lib/Dashboard.svelte'
   import { title } from './stores/title.js'
+  import { currentUser } from './stores/user.js'
   import { Router, Route } from 'svelte-routing'
   import Signup from './lib/Signup.svelte'
   import Groups from './lib/Groups.svelte'
@@ -41,14 +42,19 @@
   let session: AuthSession
 
   onMount(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      session = data.session
-    })
+    handleAuthState()
+  })
+
+  const handleAuthState = async () => {
+    const sessResp = await supabase.auth.getSession()
+    session = sessResp.data.session
+    currentUser.set(session?.user)
 
     supabase.auth.onAuthStateChange((_event, _session) => {
       session = _session
+      currentUser.set(session.user)
     })
-  })
+  }
 
   export let url = ''
 </script>
@@ -64,10 +70,10 @@
       <Route path="/signup"><Signup /></Route>
     {:else}
       <Route path="/">
-        <Account {session} />
-        <Dashboard {session} />
+        <Account />
+        <Dashboard />
       </Route>
-      <Route path="/groups"><Groups {session} /></Route>
+      <Route path="/groups"><Groups /></Route>
     {/if}
   </main>
 </Router>

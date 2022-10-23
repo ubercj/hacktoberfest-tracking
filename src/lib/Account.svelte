@@ -1,21 +1,29 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import type { AuthSession } from '@supabase/supabase-js'
   import { supabase } from '../supabaseClient'
   import Avatar from './Avatar.svelte'
-  import { title } from "../stores/title.js";
+  import { title } from '../stores/title.js'
+  import { currentUser } from '../stores/user'
+  import type { User, Profile } from '../utils/types'
+  import { getUserProfile, updateUserProfile } from '../utils/queries'
 
-  title.set('Account');
+  title.set('Account')
 
-  export let session: AuthSession
+  let user: User
+  currentUser.subscribe((u: User) => {
+    user = u
+  })
+
+  let currentProfile: Profile = {
+    username: null,
+    shirt_size: null,
+    pull_requests: null,
+    website: null,
+    avatar_url: null,
+  }
 
   let loading = false
-  let username: string | null = null
-  let shirtSize: string = ''
-  let allShirtSizes: string[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
-  let pullRequests: number | null = 0
-  let website: string | null = null
-  let avatarUrl: string | null = null
+  let allShirtSizes: string[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
   onMount(() => {
     getProfile()
@@ -24,22 +32,18 @@
   const getProfile = async () => {
     try {
       loading = true
-      const { user } = session
-
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select('username, website, avatar_url, shirt_size, pull_requests')
-        .eq('id', user.id)
-        .single()
+      const { data, error, status } = await getUserProfile(user.id)
 
       if (error && status !== 406) throw error
 
       if (data) {
-        username = data.username
-        website = data.website
-        avatarUrl = data.avatar_url
-        shirtSize = data.shirt_size
-        pullRequests = data.pull_requests
+        currentProfile = {
+          username: data.username,
+          shirt_size: data.website,
+          pull_requests: data.pull_requests,
+          website: data.shirt_size,
+          avatar_url: data.avatar_url,
+        }
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -53,20 +57,8 @@
   const updateProfile = async () => {
     try {
       loading = true
-      const { user } = session
 
-      const updates = {
-        id: user.id,
-        username,
-        shirt_size: shirtSize,
-        pull_requests: pullRequests,
-        website,
-        avatar_url: avatarUrl,
-        updated_at: new Date().toISOString(),
-      }
-
-      let { error } = await supabase.from('profiles').upsert(updates)
-
+      let { error } = await updateUserProfile(user.id, currentProfile)
       if (error) {
         throw error
       }
@@ -83,16 +75,20 @@
 <section class="user-account">
   <h2>Your Profile</h2>
   <form on:submit|preventDefault={updateProfile} class="form-widget">
-    <Avatar bind:url={avatarUrl} size={150} on:upload={updateProfile} />
-    <div>Email: {session.user.email}</div>
+    <Avatar
+      bind:url={currentProfile.avatar_url}
+      size={150}
+      on:upload={updateProfile}
+    />
+    <div>Email: {user.email}</div>
     <div>
       <label for="username">Name</label>
-      <input id="username" type="text" bind:value={username} />
+      <input id="username" type="text" bind:value={currentProfile.username} />
     </div>
     <div>
       <label for="shirtSize">Shirt Size</label>
-      <select class="shirt-size-select" bind:value={shirtSize} >
-        <option value='' selected disabled hidden>Select a Size</option>
+      <select class="shirt-size-select" bind:value={currentProfile.shirt_size}>
+        <option value="" selected disabled hidden>Select a Size</option>
         {#each allShirtSizes as singleShirtSize}
           <option value={singleShirtSize}>
             {singleShirtSize}
@@ -102,11 +98,15 @@
     </div>
     <div>
       <label for="pullRequests">Pull Requests</label>
-      <input id="pullRequests" type="number" bind:value={pullRequests} />
+      <input
+        id="pullRequests"
+        type="number"
+        bind:value={currentProfile.pull_requests}
+      />
     </div>
     <div>
       <label for="website">Website</label>
-      <input id="website" type="text" bind:value={website} />
+      <input id="website" type="text" bind:value={currentProfile.website} />
     </div>
     <div>
       <button type="submit" class="button primary block" disabled={loading}>

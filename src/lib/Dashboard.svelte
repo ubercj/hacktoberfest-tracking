@@ -1,78 +1,52 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { supabase } from '../supabaseClient'
   import { title } from '../stores/title.js'
   import { link } from 'svelte-routing'
+  import { currentUser } from '../stores/user'
+  import { getGroups, getProfilesForGroup } from '../utils/queries'
+  import type { User, Group, Profile } from '../utils/types'
 
   title.set('Dashboard')
-  import type { AuthSession } from '@supabase/supabase-js'
 
-  export let session: AuthSession
-  const { user } = session
+  let user: User
+  currentUser.subscribe((u: User) => {
+    user = u
+  })
 
   let loading = false
-  let userGroups = []
-  let selectedGroup
-  let profiles = []
+  let userGroups: Group[] = []
+  let selectedGroup: Group
+  let profiles: Profile[] = []
 
   onMount(() => {
     getDashboardData()
   })
 
   const getDashboardData = async () => {
-    await getGroups()
-    await getGroupProfiles()
-  }
-
-  const getGroups = async () => {
-    const { data: groupData, error: groupError } = await supabase
-      .from('groups')
-      .select(
-        `
-          id,
-          name,
-          group_profile!inner (
-            id
-          )
-        `
-      )
-      .eq('group_profile.profile_id', user.id)
-
-    if (groupData) {
-      userGroups = groupData
-      selectedGroup = groupData[0]
-    }
-  }
-
-  const getGroupProfiles = async () => {
+    loading = true
     try {
-      loading = true
-      if (!selectedGroup) return
+      const { data: groupData, error: groupError } = await getGroups(user.id)
+      if (groupData) {
+        userGroups = groupData
+        if (!selectedGroup) selectedGroup = groupData[0]
+      }
+      if (groupError) {
+        throw new Error(`There was an error retrieving group data`)
+      }
 
-      const { data: groupProfiles, error: profilesError } = await supabase
-        .from('profiles')
-        .select(
-          `
-          id,
-          username,
-           website,
-           avatar_url,
-           shirt_size,
-           pull_requests,
-           group_profile!inner (
-            id,
-            group_id
-            )
-          `
-        )
-        .eq('group_profile.group_id', selectedGroup.id)
-
+      const { data: groupProfiles, error: profilesError } =
+        await getProfilesForGroup(selectedGroup.id)
       if (groupProfiles) {
         profiles = groupProfiles
       }
+      if (profilesError) {
+        throw new Error(
+          `There was an error retrieving profiles for ${selectedGroup.name}`
+        )
+      }
     } catch (error) {
-      console.error('Error fetching Groups from database: ', error)
-      alert(`There was an error retrieving data for ${selectedGroup.name}`)
+      console.error(error)
+      alert(error.message)
     } finally {
       loading = false
     }
@@ -86,7 +60,7 @@
 
     // Re-render list of profiles when group changes
     if (selectedGroup.id !== currGroup.id) {
-      getGroupProfiles()
+      getDashboardData()
     }
   }
 </script>
