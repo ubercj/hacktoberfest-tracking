@@ -1,13 +1,15 @@
 <script lang="ts">
   import { supabase } from '../supabaseClient'
-  import { title } from "../stores/title.js";
-  import { link } from "svelte-routing";
+  import { title } from '../stores/title.js'
+  import { link } from 'svelte-routing'
 
-	title.set('Login');
+  title.set('Login')
 
   let loadingSignIn: boolean = false
   let signInEmail: string = ''
   let signInPassword: string = ''
+
+  export let skipLogin
 
   const handleSignInWithPassword = async () => {
     try {
@@ -32,7 +34,7 @@
       loadingSignIn = true
 
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github'
+        provider: 'github',
       })
 
       if (error) throw error
@@ -48,6 +50,9 @@
 <div class="row flex-center flex">
   <div class="col-6 form-widget" aria-live="polite">
     <h1 class="header">Hacktoberfest Tracker</h1>
+    {#if import.meta.env.VITE_DEV_SERVER === 'Y'}
+      <button on:click={skipLogin}>Skip Login</button>
+    {/if}
     <p class="description">Sign in using your GitHub account</p>
     <div>
       <button
@@ -67,7 +72,10 @@
       <span class="">or</span>
     </div>
     <p class="description">Sign in using your email and password below</p>
-    <form class="form-widget" on:submit|preventDefault={handleSignInWithPassword}>
+    <form
+      class="form-widget"
+      on:submit|preventDefault={handleSignInWithPassword}
+    >
       <div>
         <label for="email">Email</label>
         <input
@@ -100,7 +108,9 @@
       </div>
     </form>
 
-    <p class="description">Don't have an account? Sign up <a href="/signup" use:link>here</a>.</p>
+    <p class="description">
+      Don't have an account? Sign up <a href="/signup" use:link>here</a>.
+    </p>
   </div>
 </div>
 
@@ -144,5 +154,4 @@
     display: inline-block;
     width: 50%;
   }
-
 </style>
