@@ -2,23 +2,40 @@
   import { link } from 'svelte-routing'
   import { onMount } from 'svelte'
   import { supabase } from '../supabaseClient'
-  import type { AuthSession } from '@supabase/supabase-js'
   import { title } from '../stores/title.js'
+  import { currentUser } from '../stores/user'
+  import type { User, Group } from '../utils/types'
+  import { getGroups } from '../utils/queries'
 
   title.set('Groups')
-  export let session: AuthSession
-  const { user } = session
 
-  let allGroups = []
-  let userGroups = []
+  let user: User
+  currentUser.subscribe((u: User) => {
+    user = u
+  })
+
+  let allGroups: Group[] = []
+  let userGroups: Group[] = []
 
   onMount(() => {
     getGroupsData()
   })
 
   const getGroupsData = async () => {
-    await getJoinedGroups()
-    await getUnjoinedGroups()
+    try {
+      const { data: groupData, error: groupError } = await getGroups(user.id)
+      if (groupData) {
+        userGroups = groupData
+      }
+      if (groupError) {
+        throw new Error(`There was an error retrieving group data`)
+      }
+
+      await getUnjoinedGroups()
+    } catch (error) {
+      console.error(error)
+      alert(error.message)
+    }
   }
 
   const getUnjoinedGroups = async () => {
@@ -34,25 +51,6 @@
 
     if (groupsData) {
       allGroups = groupsData
-    }
-  }
-
-  const getJoinedGroups = async () => {
-    const { data: groupData, error: groupError } = await supabase
-      .from('groups')
-      .select(
-        `
-          id,
-          name,
-          group_profile!inner (
-            id
-          )
-        `
-      )
-      .eq('group_profile.profile_id', user.id)
-
-    if (groupData) {
-      userGroups = groupData
     }
   }
 

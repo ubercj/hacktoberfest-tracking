@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:msw": "VITE_DEV_SERVER=Y vite",
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
@@ -12,6 +13,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.2",
     "@tsconfig/svelte": "^3.0.0",
+    "msw": "^0.47.4",
     "svelte": "^3.49.0",
     "svelte-check": "^2.8.1",
     "svelte-preprocess": "^4.10.7",
@@ -22,5 +24,8 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0-rc.10",
     "svelte-routing": "^1.6.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
