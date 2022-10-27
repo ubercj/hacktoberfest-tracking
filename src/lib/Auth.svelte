@@ -8,14 +8,14 @@
   let loadingSignIn: boolean = false
   let signInEmail: string = ''
   let signInPassword: string = ''
-  let errorMessage: Record<string, string> = { oAuth: '', emailPassword: '' }
+  let errorMessage: string = ''
 
   export let skipLogin
 
   const handleSignInWithPassword = async () => {
     try {
       loadingSignIn = true
-      errorMessage = { oAuth: '', emailPassword: '' }
+      errorMessage = ''
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: signInEmail,
@@ -26,7 +26,7 @@
     } catch (error) {
       console.error(error)
       console.log('This is the error', error)
-      errorMessage.emailPassword = error
+      errorMessage = error.message
     } finally {
       loadingSignIn = false
     }
@@ -35,7 +35,7 @@
   const handleSignInWithOAuth = async () => {
     try {
       loadingSignIn = true
-      errorMessage = { oAuth: '', emailPassword: '' }
+      errorMessage = ''
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
@@ -44,8 +44,6 @@
       if (error) throw error
     } catch (error) {
       console.error(error)
-      console.log('This is the error', error)
-      errorMessage.oAuth = error
     } finally {
       loadingSignIn = false
     }
@@ -72,9 +70,6 @@
         </span>
         <span>{loadingSignIn ? 'Loading' : 'Sign In with GitHub'}</span>
       </button>
-      {#if errorMessage.oAuth}
-        <p style="color: red;">{errorMessage.oAuth}</p>
-      {/if}
     </div>
     <div role="separator" class="divider">
       <span class="">or</span>
@@ -113,8 +108,8 @@
         >
           <span>{loadingSignIn ? 'Loading' : 'Submit Sign In'}</span>
         </button>
-        {#if errorMessage.emailPassword}
-          <p style="color: red;">{errorMessage.emailPassword}</p>
+        {#if errorMessage}
+          <p style="color: red;">{errorMessage}</p>
         {/if}
       </div>
     </form>
