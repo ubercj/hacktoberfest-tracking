@@ -39,9 +39,9 @@
       if (data) {
         currentProfile = {
           username: data.username,
-          shirt_size: data.website,
+          shirt_size: data.shirt_size,
           pull_requests: data.pull_requests,
-          website: data.shirt_size,
+          website: data.website,
           avatar_url: data.avatar_url,
         }
       }
