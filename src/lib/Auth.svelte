@@ -25,7 +25,6 @@
       if (error) throw error
     } catch (error) {
       console.error(error)
-      console.log('This is the error', error)
       errorMessage = error.message
     } finally {
       loadingSignIn = false
