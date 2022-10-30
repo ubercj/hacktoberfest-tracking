@@ -135,7 +135,6 @@
   .user-account {
     flex: 1;
     padding: 2rem;
-    border-right: 1px solid var(--custom-color);
   }
 
   .form-widget {

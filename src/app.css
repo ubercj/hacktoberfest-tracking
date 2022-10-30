@@ -49,37 +49,6 @@ h2 {
   }
 }
 
-.avatar {
-  border-radius: var(--custom-border-radius);
-  overflow: hidden;
-  max-width: 100%;
-}
-.avatar.image {
-  object-fit: cover;
-}
-.avatar.no-image {
-  background-color: #333;
-  border: 1px solid rgb(200, 200, 200);
-  border-radius: 5px;
-}
-
-.mainHeader {
-  width: 100%;
-  font-size: 1.3rem;
-  margin-bottom: 20px;
-}
-
-.avatarPlaceholder {
-  border: var(--custom-border);
-  border-radius: var(--custom-border-radius);
-  width: 35px;
-  height: 35px;
-  background-color: rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* Dashboard page */
 
 .dashboard {
@@ -87,19 +56,13 @@ h2 {
   padding: 2rem
 }
 
+.user-account {
+  border-right: 1px solid var(--sl-panel-border-color);
+}
+
 .profiles {
   padding: 1rem 0;
-  border-top: 1px solid var(--custom-color);
-}
-
-.profile-username {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.profile-description {
-  border-bottom: 1px solid var(--custom-color);
-  margin-bottom: 1rem;
+  border-top: 1px solid var(--sl-panel-border-color);
 }
 
 .visually-hidden {
