@@ -34,6 +34,9 @@
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
+        options: {
+          redirectTo: import.meta.env.VITE_REDIRECT_URL,
+        },
       })
 
       if (error) throw error
@@ -74,6 +77,7 @@
         label="Email"
         type="email"
         placeholder="Your email"
+        value={signInEmail}
         on:sl-input={(e) => (signInEmail = e.target.value)}
       />
       <sl-input
@@ -81,6 +85,7 @@
         label="Password"
         type="password"
         placeholder="Your password"
+        value={signInPassword}
         on:sl-input={(e) => (signInPassword = e.target.value)}
       />
       <sl-button type="submit" class="sign-in" aria-live="polite" {loading}>

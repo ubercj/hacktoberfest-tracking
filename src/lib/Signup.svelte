@@ -17,7 +17,7 @@
         email: signUpEmail,
         password: signUpPassword,
         options: {
-          emailRedirectTo: import.meta.env.VITE_REDIRECT_EMAIL,
+          emailRedirectTo: import.meta.env.VITE_REDIRECT_URL,
         },
       })
 
@@ -45,6 +45,7 @@
         label="Email"
         type="email"
         placeholder="Your email"
+        value={signUpEmail}
         on:sl-input={(e) => (signUpEmail = e.target.value)}
       />
       <sl-input
@@ -52,6 +53,7 @@
         label="Password"
         type="password"
         placeholder="Your password"
+        value={signUpPassword}
         on:sl-input={(e) => (signUpPassword = e.target.value)}
       />
       <sl-button

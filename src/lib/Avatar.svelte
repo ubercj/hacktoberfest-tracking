@@ -64,7 +64,7 @@
 </script>
 
 <div>
-  <sl-avatar shape="rounded" image={url} />
+  <sl-avatar shape="rounded" image={avatarUrl} />
   <!-- TODO: This is NOT accessible to screen readers -->
   <label class="upload" for="profile-pic">
     <sl-button>Upload Avatar</sl-button>
