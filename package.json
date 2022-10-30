@@ -22,6 +22,7 @@
     "vite": "^3.1.0"
   },
   "dependencies": {
+    "@shoelace-style/shoelace": "^2.0.0-beta.83",
     "@supabase/supabase-js": "^2.0.0-rc.10",
     "svelte-routing": "^1.6.0"
   },
