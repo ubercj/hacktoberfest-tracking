@@ -5,7 +5,7 @@
 
   title.set('Login')
 
-  let loading: boolean = false
+  let loading: boolean
   let signInEmail: string = ''
   let signInPassword: string = ''
 
