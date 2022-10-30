@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte'
   import { supabase } from '../supabaseClient'
 
-  export let size: number
   export let url: string
 
   let avatarUrl: string = null
@@ -64,30 +63,45 @@
   $: if (url) downloadImage(url)
 </script>
 
-<div style="width: {size}px" aria-live="polite">
-  {#if avatarUrl}
-    <img
-      src={avatarUrl}
-      alt={avatarUrl ? 'Avatar' : 'No image'}
-      class="avatar image"
-      style="height: {size}px, width: {size}px"
-    />
-  {:else}
-    <div class="avatar no-image" style="height: {size}px, width: {size}px" />
-  {/if}
-  <div style="width: {size}px">
-    <label class="button primary block" for="single">
-      {uploading ? 'Uploading ...' : 'Upload avatar'}
-    </label>
-    <span style="display:none">
-      <input
-        type="file"
-        id="single"
-        accept="image/*"
-        bind:files
-        on:change={uploadAvatar}
-        disabled={uploading}
-      />
-    </span>
-  </div>
+<div>
+  <sl-avatar shape="rounded" image={url} />
+  <!-- TODO: This is NOT accessible to screen readers -->
+  <label class="upload" for="profile-pic">
+    <sl-button>Upload Avatar</sl-button>
+  </label>
+  <input
+    class="visually-hidden"
+    aria-label="Upload avatar"
+    type="file"
+    id="profile-pic"
+    accept="image/*"
+    bind:files
+    on:change={uploadAvatar}
+    disabled={uploading}
+  />
 </div>
+
+<style>
+  sl-avatar {
+    --size: var(--account-avatar-size);
+    margin-bottom: 1rem;
+  }
+  sl-button {
+    display: inline;
+    z-index: -1;
+  }
+  label.upload {
+    width: var(--account-avatar-size);
+    display: block;
+  }
+
+  label.upload:hover {
+    cursor: pointer;
+  }
+
+  label.upload:hover sl-button::part(base) {
+    background-color: var(--sl-color-primary-50);
+    border-color: var(--sl-color-primary-300);
+    color: var(--sl-color-primary-700);
+  }
+</style>
