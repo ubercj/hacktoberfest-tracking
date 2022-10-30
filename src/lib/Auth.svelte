@@ -8,12 +8,14 @@
   let loading: boolean
   let signInEmail: string = ''
   let signInPassword: string = ''
+  let errorMessage: string = ''
 
   export let skipLogin
 
   const handleSignInWithPassword = async () => {
     try {
       loading = true
+      errorMessage = ''
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: signInEmail,
@@ -23,6 +25,7 @@
       if (error) throw error
     } catch (error) {
       console.error(error)
+      errorMessage = error.message
     } finally {
       loading = false
     }
@@ -31,6 +34,7 @@
   const handleSignInWithOAuth = async () => {
     try {
       loading = true
+      errorMessage = ''
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
@@ -91,6 +95,9 @@
       <sl-button type="submit" class="sign-in" aria-live="polite" {loading}>
         <span>Submit Sign In</span>
       </sl-button>
+      {#if errorMessage}
+        <p style="color: red;">{errorMessage}</p>
+      {/if}
     </form>
 
     <p class="description">
