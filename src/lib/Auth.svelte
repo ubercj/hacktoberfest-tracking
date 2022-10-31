@@ -5,7 +5,7 @@
 
   title.set('Login')
 
-  let loadingSignIn: boolean = false
+  let loading: boolean
   let signInEmail: string = ''
   let signInPassword: string = ''
   let errorMessage: string = ''
@@ -14,7 +14,7 @@
 
   const handleSignInWithPassword = async () => {
     try {
-      loadingSignIn = true
+      loading = true
       errorMessage = ''
 
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -27,136 +27,140 @@
       console.error(error)
       errorMessage = error.message
     } finally {
-      loadingSignIn = false
+      loading = false
     }
   }
 
   const handleSignInWithOAuth = async () => {
     try {
-      loadingSignIn = true
+      loading = true
       errorMessage = ''
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
+        options: {
+          redirectTo: import.meta.env.VITE_REDIRECT_URL,
+        },
       })
 
       if (error) throw error
     } catch (error) {
       console.error(error)
     } finally {
-      loadingSignIn = false
+      loading = false
     }
   }
 </script>
 
-<div class="row flex-center flex">
-  <div class="col-6 form-widget" aria-live="polite">
+<section class="login">
+  <div class="form-widget" aria-live="polite">
     <h1 class="header">Hacktoberfest Tracker</h1>
     {#if import.meta.env.VITE_DEV_SERVER === 'Y'}
-      <button on:click={skipLogin}>Skip Login</button>
+      <sl-button variant="warning" on:click={skipLogin}>Skip Login</sl-button>
     {/if}
-    <p class="description">Sign in using your GitHub account</p>
-    <div>
-      <button
-        type="button"
-        class="button social-button"
-        aria-live="polite"
-        disabled={loadingSignIn}
-        on:click={handleSignInWithOAuth}
-      >
-        <span>
-          <img src="/github.svg" alt="GitHub Icon" />
-        </span>
-        <span>{loadingSignIn ? 'Loading' : 'Sign In with GitHub'}</span>
-      </button>
-    </div>
+    <sl-button
+      type="button"
+      class="social-button"
+      aria-live="polite"
+      {loading}
+      on:click={handleSignInWithOAuth}
+    >
+      <img slot="prefix" src="/github.svg" alt="GitHub Icon" />
+      <span>Sign In with GitHub</span>
+    </sl-button>
     <div role="separator" class="divider">
-      <span class="">or</span>
+      <sl-divider /><span>or</span><sl-divider />
     </div>
     <p class="description">Sign in using your email and password below</p>
     <form
       class="form-widget"
       on:submit|preventDefault={handleSignInWithPassword}
     >
-      <div>
-        <label for="email">Email</label>
-        <input
-          id="email"
-          class="inputField"
-          type="email"
-          placeholder="Your email"
-          bind:value={signInEmail}
-        />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input
-          id="password"
-          class="inputField"
-          type="password"
-          placeholder="Your password"
-          bind:value={signInPassword}
-        />
-      </div>
-      <div>
-        <button
-          type="submit"
-          class="button block"
-          aria-live="polite"
-          disabled={loadingSignIn}
-        >
-          <span>{loadingSignIn ? 'Loading' : 'Submit Sign In'}</span>
-        </button>
-        {#if errorMessage}
-          <p style="color: red;">{errorMessage}</p>
-        {/if}
-      </div>
+      <sl-input
+        id="email"
+        label="Email"
+        type="email"
+        placeholder="Your email"
+        value={signInEmail}
+        on:sl-input={(e) => (signInEmail = e.target.value)}
+      />
+      <sl-input
+        id="password"
+        label="Password"
+        type="password"
+        placeholder="Your password"
+        value={signInPassword}
+        on:sl-input={(e) => (signInPassword = e.target.value)}
+      />
+      <sl-button type="submit" class="sign-in" aria-live="polite" {loading}>
+        <span>Submit Sign In</span>
+      </sl-button>
+      {#if errorMessage}
+        <p style="color: red;">{errorMessage}</p>
+      {/if}
     </form>
 
     <p class="description">
       Don't have an account? Sign up <a href="/signup" use:link>here</a>.
     </p>
   </div>
-</div>
+</section>
 
 <style>
-  .social-button {
+  .login {
+    width: 100%;
+  }
+
+  .description {
+    font-size: 1.1rem;
+  }
+
+  .form-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    max-width: 640px;
+    margin: auto;
+  }
+  .social-button::part(base) {
     display: flex;
     align-items: center;
-    justify-content: center;
+  }
+
+  .social-button::part(base):hover {
+    background-color: initial;
+  }
+
+  sl-input {
+    width: 100%;
+  }
+
+  sl-input::part(form-control) {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  sl-input::part(form-control-label) {
+    display: flex;
+    align-items: center;
+    flex: 1 0 20%;
+  }
+
+  sl-input::part(form-control-input) {
+    flex: 1 0 80%;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
     width: 100%;
     gap: 1rem;
   }
 
-  .divider {
-    color: rgb(187, 187, 187);
-    margin: 1rem 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    font-size: 0.9rem;
-  }
-
-  .divider::before {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    content: '';
-    position: relative;
-    display: inline-block;
-    width: 50%;
-  }
-
-  .divider span {
-    margin: 1rem;
-  }
-
-  .divider::after {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    content: '';
-    position: relative;
-    display: inline-block;
-    width: 50%;
+  sl-divider {
+    flex: 1;
+    --width: 2px;
   }
 </style>

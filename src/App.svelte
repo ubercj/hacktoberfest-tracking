@@ -63,7 +63,7 @@
 </svelte:head>
 
 <Router {url}>
-  <main class="container" style="padding: 50px 0 100px 0">
+  <main class="container">
     {#if !session}
       <Route path="/"><Auth {skipLogin} /></Route>
       <Route path="/signup"><Signup /></Route>

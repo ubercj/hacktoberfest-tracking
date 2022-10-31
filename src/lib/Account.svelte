@@ -75,62 +75,78 @@
 <section class="user-account">
   <h2>Your Profile</h2>
   <form on:submit|preventDefault={updateProfile} class="form-widget">
-    <Avatar
-      bind:url={currentProfile.avatar_url}
-      size={150}
-      on:upload={updateProfile}
+    <Avatar bind:url={currentProfile.avatar_url} on:upload={updateProfile} />
+    <sl-input
+      id="email"
+      label="Email"
+      type="text"
+      value={user.email}
+      disabled
     />
-    <div>Email: {user.email}</div>
-    <div>
-      <label for="username">Name</label>
-      <input id="username" type="text" bind:value={currentProfile.username} />
-    </div>
-    <div>
-      <label for="shirtSize">Shirt Size</label>
-      <select class="shirt-size-select" bind:value={currentProfile.shirt_size}>
-        <option value="" selected disabled hidden>Select a Size</option>
-        {#each allShirtSizes as singleShirtSize}
-          <option value={singleShirtSize}>
-            {singleShirtSize}
-          </option>
-        {/each}
-      </select>
-    </div>
-    <div>
-      <label for="pullRequests">Pull Requests</label>
-      <input
-        id="pullRequests"
-        type="number"
-        bind:value={currentProfile.pull_requests}
-      />
-    </div>
-    <div>
-      <label for="website">Website</label>
-      <input id="website" type="text" bind:value={currentProfile.website} />
-    </div>
-    <div>
-      <button type="submit" class="button primary block" disabled={loading}>
-        {loading ? 'Saving ...' : 'Update profile'}
-      </button>
-    </div>
-    <button
+    <sl-input
+      id="username"
+      label="Name"
+      type="text"
+      value={currentProfile.username}
+      on:sl-input={(e) => (currentProfile.username = e.target.value)}
+    />
+    <sl-select
+      label="Shirt Size"
+      value={currentProfile.shirt_size}
+      placeholder="Select a Size"
+      clearable
+      on:sl-change={(e) => (currentProfile.shirt_size = e.target.value)}
+    >
+      {#each allShirtSizes as singleShirtSize}
+        <sl-menu-item value={singleShirtSize}>
+          {singleShirtSize}
+        </sl-menu-item>
+      {/each}
+    </sl-select>
+    <sl-input
+      id="pullRequests"
+      label="Pull Requests"
+      type="number"
+      value={currentProfile.pull_requests}
+      on:sl-input={(e) => (currentProfile.pull_requests = e.target.value)}
+    />
+    <sl-input
+      id="website"
+      label="Website"
+      type="text"
+      value={currentProfile.website}
+      on:sl-input={(e) => (currentProfile.website = e.target.value)}
+    />
+    <sl-button type="submit" class="update" aria-live="polite" {loading}>
+      <span>Update Profile</span>
+    </sl-button>
+    <sl-button
       type="button"
-      class="button block"
+      variant="warning"
+      aria-live="polite"
       on:click={() => supabase.auth.signOut()}
     >
-      Sign Out
-    </button>
+      <span>Sign Out</span>
+    </sl-button>
   </form>
 </section>
 
 <style>
-  .shirt-size-select {
+  .user-account {
+    flex: 1;
+    padding: 2rem;
+  }
+
+  .form-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     width: 100%;
-    border-radius: 5px;
-    border: var(--custom-border);
-    padding: 8px;
-    font-size: 0.9rem;
-    background-color: var(--custom-bg-color);
-    color: var(--custom-color);
+    max-width: 640px;
+    margin: auto;
+  }
+
+  sl-input::part(form-control-label) {
+    margin-bottom: 0.5rem;
   }
 </style>

@@ -86,15 +86,18 @@
     <p>There are no groups to show.</p>
   {/if}
 
-  <dl class="groups-list">
+  <ul>
     {#each allGroups as group}
-      <dd class="group-name">
-        {group.name}<button data-group-id={group.id} on:click={handleClick}
-          >Join</button
-        >
-      </dd>
+      <li>
+        <sl-card>
+          <h3>{group.name}</h3>
+          <sl-button data-group-id={group.id} on:click={handleClick}
+            >Join</sl-button
+          >
+        </sl-card>
+      </li>
     {/each}
-  </dl>
+  </ul>
 
   <a href="/" use:link>Back to Dashboard</a>
 </section>
@@ -105,10 +108,18 @@
     margin: 0 auto;
   }
 
-  dd {
+  li {
+    list-style: none;
+  }
+
+  sl-card {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  sl-card::part(body) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
   }
 </style>

@@ -69,11 +69,15 @@
   <header>
     <h1>{selectedGroup ? selectedGroup.name : 'Your'} Dashboard</h1>
     {#if userGroups.length}
-      <select name="groupSelect" id="groupSelect" on:change={handleGroupChange}>
+      <sl-select
+        value={selectedGroup.id}
+        placeholder="Select a Group"
+        on:sl-change={(e) => handleGroupChange(e)}
+      >
         {#each userGroups as group}
-          <option value={group.id}>{group.name}</option>
+          <sl-menu-item value={group.id}>{group.name}</sl-menu-item>
         {/each}
-      </select>
+      </sl-select>
     {:else}
       <p>
         You are not a member of any groups. <a href="/groups" use:link
@@ -83,15 +87,17 @@
     {/if}
   </header>
 
-  <dl class="profiles">
+  <ul class="profiles">
     {#each profiles as profile}
-      <dt class="profile-username">{profile.username}</dt>
-      <dd class="profile-description">
-        <p>Pull requests completed: {profile.pull_requests}</p>
-        <p>Shirt size: {profile.shirt_size}</p>
-      </dd>
+      <li>
+        <sl-card>
+          <div slot="header"><h3>{profile.username}</h3></div>
+          <p>Pull requests completed: {profile.pull_requests}</p>
+          <p>Shirt size: {profile.shirt_size}</p>
+        </sl-card>
+      </li>
     {/each}
-  </dl>
+  </ul>
 
   <p><a href="/groups" use:link>See all groups.</a></p>
 </section>
@@ -104,9 +110,12 @@
     align-items: center;
   }
 
-  select {
-    background: black;
-    color: white;
-    padding: 0.5rem;
+  li {
+    list-style: none;
+  }
+
+  sl-card {
+    width: 100%;
+    margin-bottom: 1rem;
   }
 </style>
